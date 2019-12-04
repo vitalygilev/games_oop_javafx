@@ -1,6 +1,9 @@
 package job4j.tictactoe;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Logic3T {
     private final Figure3T[][] table;
@@ -9,35 +12,39 @@ public class Logic3T {
         this.table = table;
     }
 
-    public boolean fillBy(Predicate<Figure3T> predicate, int startX, int startY, int deltaX, int deltaY) {
-        boolean result = true;
-        for (int index = 0; index != this.table.length; index++) {
-            Figure3T cell = this.table[startX][startY];
-            startX += deltaX;
-            startY += deltaY;
-            if (!predicate.test(cell)) {
-                result = false;
-                break;
+    public boolean fillBy(Predicate<Figure3T> predicate) {
+        int countByX = 0;
+        int countByY = 0;
+        int countByMaDi = 0;
+        int countByBaDi = 0;
+        for (int index = 0; index < table.length; index++) {
+            countByMaDi += (predicate.test(table[index][index]) ? 1 : 0);
+            countByBaDi += (predicate.test(table[table.length - index - 1][index]) ? 1 : 0);
+            if (predicate.test(table[index][index])) {
+                for (int eIndex = 0; eIndex < table.length; eIndex++) {
+                    countByX += (predicate.test(table[index][eIndex]) ? 1 : 0);
+                    countByY += (predicate.test(table[eIndex][index]) ? 1 : 0);
+                }
+                if (countByX == table.length || countByY == table.length) {
+                    break;
+                }
             }
         }
-        return result;
+        return (countByX == table.length || countByY == table.length ||
+                countByMaDi == table.length || countByBaDi == table.length);
     }
 
     public boolean isWinnerX() {
-        return this.fillBy(Figure3T::hasMarkX, 0, 0, 1, 0) ||
-                this.fillBy(Figure3T::hasMarkX, 0, 0, 0, 1) ||
-                this.fillBy(Figure3T::hasMarkX, 0,0, 1, 1) ||
-                this.fillBy(Figure3T::hasMarkX, this.table.length - 1 , 0, -1, 1);
+        return this.fillBy(Figure3T::hasMarkX);
     }
 
     public boolean isWinnerO() {
-        return this.fillBy(Figure3T::hasMarkO, 0, 0, 1, 0) ||
-                this.fillBy(Figure3T::hasMarkO, 0, 0, 0, 1) ||
-                this.fillBy(Figure3T::hasMarkO, 0,0, 1, 1) ||
-                this.fillBy(Figure3T::hasMarkO, this.table.length - 1, 0, -1, 1);
+        return this.fillBy(Figure3T::hasMarkO);
     }
 
     public boolean hasGap() {
-        return true;
+        return Arrays.stream(table)
+                .flatMap(Arrays::stream)
+                .anyMatch(Figure3T::hasNoMark);
     }
 }

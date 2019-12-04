@@ -19,7 +19,6 @@ public class Logic3TTest {
         assertThat(login.isWinnerX(), is(true));
     }
 
-
     @Test
     public void whenNotFill() {
         Figure3T[][] table = {
@@ -29,7 +28,7 @@ public class Logic3TTest {
         };
         Logic3T login = new Logic3T(table);
         assertThat(login.isWinnerX(), is(false));
-        assertThat(login.isWinnerX(), is(false));
+        assertThat(login.isWinnerO(), is(false));
     }
 
     @Test
@@ -44,6 +43,17 @@ public class Logic3TTest {
     }
 
     @Test
+    public void whenHasOHorizontalWinner() {
+        Figure3T[][] table = {
+                {new Figure3T(), new Figure3T(), new Figure3T()},
+                {new Figure3T(false, true), new Figure3T(false, true), new Figure3T(false, true)},
+                {new Figure3T(), new Figure3T(), new Figure3T()},
+        };
+        Logic3T login = new Logic3T(table);
+        assertThat(login.isWinnerO(), is(true));
+    }
+
+    @Test
     public void whenHasXVerticalWinner() {
         Figure3T[][] table = {
                 {new Figure3T(), new Figure3T(true, false), new Figure3T()},
@@ -52,6 +62,17 @@ public class Logic3TTest {
         };
         Logic3T login = new Logic3T(table);
         assertThat(login.isWinnerX(), is(true));
+    }
+
+    @Test
+    public void whenHasOVerticalWinner() {
+        Figure3T[][] table = {
+                {new Figure3T(), new Figure3T(false, true), new Figure3T()},
+                {new Figure3T(), new Figure3T(false, true), new Figure3T()},
+                {new Figure3T(), new Figure3T(false, true), new Figure3T()},
+        };
+        Logic3T login = new Logic3T(table);
+        assertThat(login.isWinnerO(), is(true));
     }
 
     @Test
@@ -66,18 +87,51 @@ public class Logic3TTest {
     }
 
     @Test
-    public void whenHasOWinner() {
+    public void whenHasOBackDiagonalWinner() {
         Figure3T[][] table = {
-                {new Figure3T(true, false), new Figure3T(), new Figure3T()},
-                {new Figure3T(true, false), new Figure3T(true, false), new Figure3T()},
-                {new Figure3T(true, false), new Figure3T(), new Figure3T(true, false)},
+                {new Figure3T(), new Figure3T(), new Figure3T(false, true)},
+                {new Figure3T(), new Figure3T(false, true), new Figure3T()},
+                {new Figure3T(false, true), new Figure3T(), new Figure3T()},
         };
         Logic3T login = new Logic3T(table);
         assertThat(login.isWinnerO(), is(true));
     }
 
     @Test
-    public void whenHasGas() {
+    public void whenHasXMainDiagonalWinner() {
+        Figure3T[][] table = {
+                {new Figure3T(true, false), new Figure3T(), new Figure3T()},
+                {new Figure3T(), new Figure3T(true, false), new Figure3T()},
+                {new Figure3T(), new Figure3T(), new Figure3T(true, false)},
+        };
+        Logic3T login = new Logic3T(table);
+        assertThat(login.isWinnerX(), is(true));
+    }
+
+    @Test
+    public void whenHasOMainDiagonalWinner() {
+        Figure3T[][] table = {
+                {new Figure3T(false, true), new Figure3T(), new Figure3T()},
+                {new Figure3T(), new Figure3T(false, true), new Figure3T()},
+                {new Figure3T(), new Figure3T(), new Figure3T(false, true)},
+        };
+        Logic3T login = new Logic3T(table);
+        assertThat(login.isWinnerO(), is(true));
+    }
+
+    @Test
+    public void whenHasOWinner() {
+        Figure3T[][] table = {
+                {new Figure3T(false, true), new Figure3T(), new Figure3T()},
+                {new Figure3T(false, true), new Figure3T(true, false), new Figure3T()},
+                {new Figure3T(false, true), new Figure3T(), new Figure3T(true, false)},
+        };
+        Logic3T login = new Logic3T(table);
+        assertThat(login.isWinnerO(), is(true));
+    }
+
+    @Test
+    public void whenHasGap() {
         Figure3T[][] table = {
                 {new Figure3T(true, false), new Figure3T(), new Figure3T()},
                 {new Figure3T(), new Figure3T(true, false), new Figure3T()},
