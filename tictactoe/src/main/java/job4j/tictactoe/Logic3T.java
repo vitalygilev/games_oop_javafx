@@ -20,10 +20,15 @@ public class Logic3T {
         for (int index = 0; index < table.length; index++) {
             countByMaDi += (predicate.test(table[index][index]) ? 1 : 0);
             countByBaDi += (predicate.test(table[table.length - index - 1][index]) ? 1 : 0);
+            if (countByMaDi == table.length || countByBaDi == table.length) {
+                break;
+            }
             if (predicate.test(table[index][index])) {
-                for (int eIndex = 0; eIndex < table.length; eIndex++) {
-                    countByX += (predicate.test(table[index][eIndex]) ? 1 : 0);
-                    countByY += (predicate.test(table[eIndex][index]) ? 1 : 0);
+                countByX = 0;
+                countByY = 0;
+                for (int eIndex = 0; eIndex < table.length && (countByX !=-1 || countByY !=-1); eIndex++) {
+                    countByX += (predicate.test(table[index][eIndex]) && countByX !=-1 ? 1 : -countByX - 1);
+                    countByY += (predicate.test(table[eIndex][index]) && countByY !=-1 ? 1 : -countByY - 1);
                 }
                 if (countByX == table.length || countByY == table.length) {
                     break;
